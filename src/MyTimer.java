@@ -16,7 +16,7 @@ public class MyTimer {
 	};
 	
 	public static void autoPriceUpdater() {
-		timer.scheduleAtFixedRate(task, 0, 3600000);
+		timer.scheduleAtFixedRate(task, 0, 10800000);
 	}
 
 }
