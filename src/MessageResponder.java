@@ -23,6 +23,7 @@ public class MessageResponder extends ListenerAdapter {
 			  "Twisted Buckler"};
 	public static int[] dropAmnt = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	public static int[] itemPrices = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	MyTimer myTimer = new MyTimer();
 	int amount = 0;
 	String itemName = "";
 
@@ -67,20 +68,15 @@ public class MessageResponder extends ListenerAdapter {
 			writeFile();
 		}
 		if (message.startsWith("!price")) {
-			itemReader(message);
-			int itemNum = 0;
-			for (int i = 0; i < drops.length; ++i) {
-				if (drops[i].contains(itemName)) {
-					itemNum = i;
-					i = drops.length;
-				}
-			}
+			itemName = message.substring(7);
 			event.getTextChannel().sendMessage(itemName + ": " + formatNumber(getPrice(itemName))).queue();
 		}
 		if (message.startsWith("!printlog")) {
 			int total = 0;
 			event.getTextChannel().sendMessage(fileStrBuilder()).queue();
-			itemPriceBuilder();
+			/*for (int i = 0; i < itemPrices.length; ++i) {
+				itemPrices[i] = getPrice(drops[i]);
+			}*/
 			for (int i = 0; i < itemPrices.length; ++i) {
 				total += (itemPrices[i] * dropAmnt[i]);
 			}
@@ -122,19 +118,7 @@ public class MessageResponder extends ListenerAdapter {
 		return str;
 	}
 	
-	public void itemPriceBuilder() {
-		for (int i = 0; i < itemPrices.length; ++i) {
-			try {
-				itemPrices[i] = Integer.valueOf(Connection.webReader(drops[i]));
-				System.out.println(itemPrices[i]);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	public int getPrice(String name) {
+	public static int getPrice(String name) {
 		int price = 0;
 		try {
 			price = Connection.webReader(name);
@@ -150,7 +134,7 @@ public class MessageResponder extends ListenerAdapter {
 		NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
 	    return numberFormat.format(number);
 	}
-	
+
 	public void readFile () {
 		// Read current totals from file
 		try {

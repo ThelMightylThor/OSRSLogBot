@@ -33,6 +33,7 @@ public class Connection {
 		}
 		
 		discord.addEventListener(new MessageResponder());
+		MyTimer.autoPriceUpdater();
 	}
 	
 	public static void readFile() throws IOException {
