@@ -23,55 +23,59 @@ public class MessageResponder extends ListenerAdapter {
 			  "Twisted Buckler"};
 	public static int[] dropAmnt = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	public static int[] itemPrices = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	int amount = 0;
+	String itemName = "";
 
 	public void onMessageReceived (MessageReceivedEvent event) {
 		String message = event.getMessage().getContent();
 		String name = event.getAuthor().getName();
-		String[] details = itemReader(message);
 		
 		if (message.startsWith("!ready")) {
 			event.getTextChannel().sendMessage(ready(name)).queue();
 		}
 		if (message.startsWith("+")) {
+			itemReader(message);
 			int itemNum = -1;
 			for (int i = 0; i < drops.length; ++i) {
-				if (drops[i].contains(details[1])) {
+				if (drops[i].contains(itemName)) {
 					itemNum = i;
 					i = drops.length;
 				}
 			}
 			if (itemNum != -1) {
-				event.getTextChannel().sendMessage("Adding " + details[0] + " " + drops[itemNum] + " to the drop log.").queue();
-				dropAmnt[itemNum] += Integer.parseInt(details[0]);
+				event.getTextChannel().sendMessage("Adding " + amount + " " + drops[itemNum] + " to the drop log.").queue();
+				dropAmnt[itemNum] += amount;
 				event.getTextChannel().sendMessage("Approximate Value: " + formatNumber(getPrice(drops[itemNum]))).queue();
 				event.getTextChannel().sendMessage("Curennt total: " + dropAmnt[itemNum]).queue();;
 			}
 			writeFile();
 		}
 		if (message.startsWith("-")) {
+			itemReader(message);
 			int itemNum = -1;
 			for (int i = 0; i < drops.length; ++i) {
-				if (drops[i].contains(details[1])) {
+				if (drops[i].contains(itemName)) {
 					itemNum = i;
 					i = drops.length;
 				}
 			}
 			if (itemNum != -1) {
-				event.getTextChannel().sendMessage("Removing " + details[0] + " " + drops[itemNum] + " from the drop log.").queue();
-				dropAmnt[itemNum] -= Integer.parseInt(details[0]);
-				event.getTextChannel().sendMessage("Curennt total: " + dropAmnt[itemNum]).queue();;
+				event.getTextChannel().sendMessage("Removing " + amount + " " + drops[itemNum] + " from the drop log.").queue();
+				dropAmnt[itemNum] -= amount;
+				event.getTextChannel().sendMessage("Current total: " + dropAmnt[itemNum]).queue();;
 			}
 			writeFile();
 		}
 		if (message.startsWith("!price")) {
+			itemReader(message);
 			int itemNum = 0;
 			for (int i = 0; i < drops.length; ++i) {
-				if (drops[i].contains(details[1])) {
+				if (drops[i].contains(itemName)) {
 					itemNum = i;
 					i = drops.length;
 				}
 			}
-			event.getTextChannel().sendMessage(details[1] + ": " + formatNumber(getPrice(details[1]))).queue();
+			event.getTextChannel().sendMessage(itemName + ": " + formatNumber(getPrice(itemName))).queue();
 		}
 		if (message.startsWith("!printlog")) {
 			int total = 0;
@@ -98,19 +102,18 @@ public class MessageResponder extends ListenerAdapter {
 	 * formatted for future validation.
 	 * Example: +1 bow or -1 buckler
 	 */
-	public String[] itemReader (String message) {
-		String[] details = new String[2];
+	public void itemReader(String message) {
 		readFile();
-		details[0] = String.valueOf(message.charAt(1));
-		details[1] = message.substring(message.indexOf(" ") + 1, message.length());
-		details[1] = Character.toUpperCase(details[1].charAt(0)) + details[1].substring(1);
-		return details;
+		amount = Integer.valueOf(message.substring(1, message.indexOf(" ")));
+		itemName = message.substring(message.indexOf(" ") + 1, message.length());
+		itemName = Character.toUpperCase(itemName.charAt(0)) + itemName.substring(1).toLowerCase();
+		System.out.println(itemName);
 	}
 	/*
 	 * Converts the text file into an
 	 * acceptable format for printing.
 	 */
-	public String fileStrBuilder () {
+	public String fileStrBuilder() {
 		readFile();
 		String str = "";
 		for (int i = 0; i < dropAmnt.length; ++i) {
