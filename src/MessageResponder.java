@@ -88,7 +88,7 @@ public class MessageResponder extends ListenerAdapter {
 	 * to the user.
 	 */
 	public String ready (String name) {
-		return name + ", I am ready.";
+		return name + ", I am ready";
 	}
 	/*
 	 * Takes a string in the format of +y x
