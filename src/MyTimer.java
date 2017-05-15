@@ -10,7 +10,15 @@ public class MyTimer {
 		public void run() {
 			++secondsPassed;
 			for (int i = 0; i < MessageResponder.itemPrices.length; ++i) {
-				MessageResponder.itemPrices[i] = MessageResponder.getPrice(MessageResponder.drops[i]);
+				//MessageResponder.itemPrices[i] = MessageResponder.getPrice(MessageResponder.drops[i]);
+				int price = MessageResponder.getPrice(MessageResponder.drops[i]);
+				if (MessageResponder.itemPrices[i] != 0 && price == 0) {
+					MessageResponder.itemPrices[i] = MessageResponder.itemPrices[i];
+				} else if (MessageResponder.itemPrices[i] == 0 && price != 0) {
+					MessageResponder.itemPrices[i] = price;
+				} else if (MessageResponder.itemPrices[i] != 0 && price != 0) {
+					MessageResponder.itemPrices[i] = price;
+				}
 			}
 		}
 	};

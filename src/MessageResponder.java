@@ -47,7 +47,7 @@ public class MessageResponder extends ListenerAdapter {
 				event.getTextChannel().sendMessage("Adding " + amount + " " + drops[itemNum] + " to the drop log.").queue();
 				dropAmnt[itemNum] += amount;
 				event.getTextChannel().sendMessage("Approximate Value: " + formatNumber(getPrice(drops[itemNum]))).queue();
-				event.getTextChannel().sendMessage("Curennt total: " + dropAmnt[itemNum]).queue();;
+				event.getTextChannel().sendMessage("Current total: " + dropAmnt[itemNum]).queue();;
 			}
 			writeFile();
 		}
