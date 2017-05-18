@@ -23,6 +23,7 @@ public class MessageResponder extends ListenerAdapter {
 			  "Twisted Buckler"};
 	public static int[] dropAmnt = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	public static int[] itemPrices = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	int[] potPrices = new int[4];
 	MyTimer myTimer = new MyTimer();
 	int amount = 0;
 	String itemName = "";
@@ -82,6 +83,24 @@ public class MessageResponder extends ListenerAdapter {
 			}
 			event.getTextChannel().sendMessage("Total Value: " + formatNumber(total)).queue();
 		}
+		if (message.startsWith("!pot")) {
+			itemName = message.substring(5);
+			for (int i = 0; i < 4; ++i) {
+				potPrices[i] = getPrice(itemName + " " + (i + 1));
+			}	
+			for (int i = 0; i < 4; ++i) {
+				event.getTextChannel().sendMessage(itemName + " (" + (i + 1) + ") " + potPrices[i] + "gp" + " / " + (i + 1) + " = " + potPrices[i] / (i + 1) + "gp").queue();
+			}
+		}
+		if (message.startsWith("!prayvalue")) {
+			int lvl = Integer.valueOf(message.substring(11));
+			int pray = getPrice("prayer potion 4");
+			int rest = getPrice("super restore 4");
+			int restored = (int) Math.floor(7 + (lvl / 4));
+			event.getTextChannel().sendMessage("Pray pot cost per point: " + pray / restored + "gp").queue();
+			restored = (int) Math.floor(8 + (lvl / 4));
+			event.getTextChannel().sendMessage("Rest pot cost per point: " + rest / restored + "gp").queue();
+		}
 	}
 	/*
 	 * Returns the user's user-name and a message
@@ -129,7 +148,7 @@ public class MessageResponder extends ListenerAdapter {
 		}
 		return price;
 	}
-	
+
 	public String formatNumber(int number) {
 		NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
 	    return numberFormat.format(number);
