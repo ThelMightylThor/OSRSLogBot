@@ -21,8 +21,8 @@ public class MessageResponder extends ListenerAdapter {
 			  "Ancestral Robe Top",
 			  "Ancestral Robe Bottom",
 			  "Twisted Buckler"};
-	public static int[] dropAmnt = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	public static int[] itemPrices = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	public static long[] dropAmnt = new long[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	public static long[] itemPrices = new long[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	int[] potPrices = new int[4];
 	MyTimer myTimer = new MyTimer();
 	int amount = 0;
@@ -73,7 +73,7 @@ public class MessageResponder extends ListenerAdapter {
 			event.getTextChannel().sendMessage(itemName + ": " + formatNumber(getPrice(itemName))).queue();
 		}
 		if (message.startsWith("!printlog")) {
-			int total = 0;
+			long total = 0;
 			event.getTextChannel().sendMessage(fileStrBuilder()).queue();
 			/*for (int i = 0; i < itemPrices.length; ++i) {
 				itemPrices[i] = getPrice(drops[i]);
@@ -150,6 +150,11 @@ public class MessageResponder extends ListenerAdapter {
 	}
 
 	public String formatNumber(int number) {
+		NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+	    return numberFormat.format(number);
+	}
+	
+	public String formatNumber(long number) {
 		NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
 	    return numberFormat.format(number);
 	}
