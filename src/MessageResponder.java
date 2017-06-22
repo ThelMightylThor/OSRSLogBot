@@ -97,9 +97,9 @@ public class MessageResponder extends ListenerAdapter {
 			int pray = getPrice("prayer potion 4");
 			int rest = getPrice("super restore 4");
 			int restored = (int) Math.floor(7 + (lvl / 4));
-			event.getTextChannel().sendMessage("Pray pot cost per point: " + pray / restored + "gp").queue();
+			event.getTextChannel().sendMessage("Pray pot cost per point: " + (pray / 4) / restored + "gp").queue();
 			restored = (int) Math.floor(8 + (lvl / 4));
-			event.getTextChannel().sendMessage("Rest pot cost per point: " + rest / restored + "gp").queue();
+			event.getTextChannel().sendMessage("Rest pot cost per point: " + (rest / 4) / restored + "gp").queue();
 		}
 	}
 	/*
